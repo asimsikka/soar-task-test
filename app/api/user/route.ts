@@ -56,6 +56,4 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export const config = {
-  api: { bodyParser: false },
-}
+// No need for export const config anymore.
