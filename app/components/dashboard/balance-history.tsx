@@ -1,46 +1,66 @@
-"use client"
+'use client'
 
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { SpinnerContainer } from '@/components/ui/spinnerContainer'
+import { useQuery } from '@/hooks/useQuery'
+import { API_ENDPOINTS } from '@/lib/endpoints'
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
-const data = [
-  { name: "Jul", value: 100 },
-  { name: "Aug", value: 880 },
-  { name: "Sep", value: 450 },
-  { name: "Oct", value: 250 },
-  { name: "Nov", value: 550 },
-  { name: "Dec", value: 150 },
-  { name: "Jan", value: 600 },
-]
+type BalanceHistoryData = {
+  name: string
+  value: number
+}[]
 
 export function BalanceHistory() {
+  const { data, error, loading } = useQuery<BalanceHistoryData>({
+    url: API_ENDPOINTS.BALANCE_HISTORY,
+  })
+
+  if (loading) {
+    return <SpinnerContainer />
+  }
+
+  const chartData = data || []
+
   return (
     <div className="w-full">
-      <h2 className="text-[22px] font-semibold text-[#27364B] mb-4">Balance History</h2>
-      <div className="bg-white rounded-[20px] p-8 h-[280px]">
+      <h2 className="mb-4 text-[22px] font-semibold text-[#27364B]">
+        Balance History
+      </h2>
+      <div className="h-[280px] rounded-[20px] bg-white p-8">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
+          <AreaChart
+            data={chartData}
+            margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+          >
             <defs>
               <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="50%" stopColor="#2A85FF" stopOpacity={0.1}/>
-                <stop offset="95%" stopColor="#2A85FF" stopOpacity={0.01}/>
+                <stop offset="50%" stopColor="#1814f3" stopOpacity={0.1} />
+                <stop offset="95%" stopColor="#1814f3" stopOpacity={0.01} />
               </linearGradient>
             </defs>
-            <CartesianGrid 
-              strokeDasharray="3" 
+            <CartesianGrid
+              strokeDasharray="3"
               vertical={false}
               stroke="#E7EEF8"
               strokeWidth={1}
             />
-            <XAxis 
-              dataKey="name" 
-              axisLine={false} 
+            <XAxis
+              dataKey="name"
+              axisLine={false}
               tickLine={false}
               tick={{ fill: '#6F767E', fontSize: 13 }}
               dy={10}
               padding={{ left: 10, right: 10 }}
             />
-            <YAxis 
-              axisLine={false} 
+            <YAxis
+              axisLine={false}
               tickLine={false}
               tick={{ fill: '#6F767E', fontSize: 13 }}
               tickCount={5}
@@ -52,7 +72,7 @@ export function BalanceHistory() {
             <Area
               type="monotone"
               dataKey="value"
-              stroke="#2A85FF"
+              stroke="#1814f3"
               strokeWidth={2}
               fill="url(#colorValue)"
               dot={false}
@@ -63,4 +83,3 @@ export function BalanceHistory() {
     </div>
   )
 }
-

@@ -1,91 +1,112 @@
-"use client"
+'use client'
 
-import Link from "next/link"
-import { Home, Receipt, Users, LineChart, CreditCard, Wallet, Settings, PenToolIcon as Tool, Shield, Menu } from 'lucide-react'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
-const menuItems = [
-  { icon: Home, label: "Dashboard", href: "/" },
-  { icon: Receipt, label: "Transactions", href: "/transactions" },
-  { icon: Users, label: "Accounts", href: "/accounts" },
-  { icon: LineChart, label: "Investments", href: "/investments" },
-  { icon: CreditCard, label: "Credit Cards", href: "/credit-cards" },
-  { icon: Wallet, label: "Loans", href: "/loans" },
-  { icon: Tool, label: "Services", href: "/services" },
-  { icon: Shield, label: "My Privileges", href: "/privileges" },
-  { icon: Settings, label: "Setting", href: "/settings" },
+type MenuItem = {
+  icon: string
+  label: string
+  href: string
+}
+
+const menuItems: MenuItem[] = [
+  { icon: 'home.svg', label: 'Dashboard', href: '/' },
+  { icon: 'receipt.svg', label: 'Transactions', href: '/transactions' },
+  { icon: 'users.svg', label: 'Accounts', href: '/accounts' },
+  { icon: 'line-chart.svg', label: 'Investments', href: '/investments' },
+  { icon: 'credit-card.svg', label: 'Credit Cards', href: '/credit-cards' },
+  { icon: 'wallet.svg', label: 'Loans', href: '/loans' },
+  { icon: 'tool.svg', label: 'Services', href: '/services' },
+  { icon: 'shield.svg', label: 'My Privileges', href: '/privileges' },
+  { icon: 'settings.svg', label: 'Settings', href: '/settings' },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
-  
+
+  const renderMenuItem = (item: MenuItem) => (
+    <Link
+      key={item.href}
+      href={item.href}
+      className={`relative flex items-center gap-3 rounded-xl px-8 py-3 text-[15px] font-medium transition-colors ${
+        pathname === item.href
+          ? 'text-[#232323] before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:rounded-r before:bg-black'
+          : 'text-[#b1b1b1] hover:bg-[#F4F4F4] hover:text-[#232323]'
+      }`}
+    >
+      <Image
+        src={`/svgs/${item.icon}`}
+        alt={`${item.label} Icon`}
+        width={20}
+        height={20}
+        className={`h-5 w-5 ${
+          pathname === item.href ? 'brightness-0 filter' : ''
+        }`}
+      />
+      <span>{item.label}</span>
+    </Link>
+  )
+
   return (
     <>
-      {/* Mobile Sidebar */}
       <Sheet>
-        <SheetTrigger asChild className="lg:hidden fixed top-4 left-4 z-50">
+        <SheetTrigger asChild className="fixed left-4 top-4 z-50 lg:hidden">
           <Button variant="ghost" size="icon">
-            {/* <Menu className="h-6 w-6" /> */}
+            <Image
+              src="/svgs/menu.svg"
+              alt="Menu Icon"
+              width={24}
+              height={24}
+            />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[300px] p-0">
-          <SheetHeader className="p-6 border-b">
+        <SheetContent side="left" className="w-[300px] p-0 sm:w-[300px]">
+          <SheetHeader className="border-b p-6">
             <SheetTitle>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#1A1D1F] rounded-lg flex items-center justify-center">
-                  <CreditCard className="h-5 w-5 text-white" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg">
+                  <Image
+                    src="/svgs/logo.svg"
+                    alt="Logo Icon"
+                    width={20}
+                    height={20}
+                  />
                 </div>
                 <span>Soar Task</span>
               </div>
             </SheetTitle>
           </SheetHeader>
-          <nav className="px-6 py-4 space-y-2">
-            {menuItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 text-[15px] font-medium rounded-xl transition-colors ${
-                  pathname === item.href
-                    ? "text-[#2A85FF] bg-[#EFF3FF]" 
-                    : "text-[#6F767E] hover:bg-[#F4F4F4] hover:text-[#1A1D1F]"
-                }`}
-              >
-                <item.icon className="h-5 w-5" />
-                <span>{item.label}</span>
-              </Link>
-            ))}
+          <nav className="space-y-2 px-6 py-4">
+            {menuItems.map(renderMenuItem)}
           </nav>
         </SheetContent>
       </Sheet>
 
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:flex w-[280px] border-r border-[#F4F4F4] bg-white p-6 flex-col fixed h-screen">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-8 h-8 bg-[#1A1D1F] rounded-lg flex items-center justify-center">
-            <CreditCard className="h-5 w-5 text-white" />
+      <div className="fixed hidden h-screen w-[280px] flex-col border-r border-[#F4F4F4] bg-white py-6 lg:flex">
+        <div className="mb-8 flex items-center gap-3 px-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg">
+            <Image
+              src="/svgs/logo.svg"
+              alt="Logo Icon"
+              width={20}
+              height={20}
+            />
           </div>
-          <span className="font-semibold text-lg text-[#1A1D1F]">Soar Task</span>
+          <span className="text-xl font-bold text-[#1A1D1F]">
+            Soar Task
+          </span>
         </div>
-        <nav className="space-y-2">
-          {menuItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 text-[15px] font-medium rounded-xl transition-colors ${
-                pathname === item.href
-                  ? "text-[#2A85FF] bg-[#EFF3FF]" 
-                  : "text-[#6F767E] hover:bg-[#F4F4F4] hover:text-[#1A1D1F]"
-              }`}
-            >
-              <item.icon className="h-5 w-5" />
-              <span>{item.label}</span>
-            </Link>
-          ))}
-        </nav>
+        <nav className="space-y-2">{menuItems.map(renderMenuItem)}</nav>
       </div>
     </>
   )
 }
-
