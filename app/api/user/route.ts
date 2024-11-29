@@ -1,6 +1,12 @@
+import fs from 'fs'
 import { writeFile } from 'fs/promises'
+import { NextConfig } from 'next'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
+
+export const config: NextConfig = {
+  api: { bodyParser: false },
+}
 
 export async function GET() {
   const userData = {
@@ -37,10 +43,19 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     const uploadDir = path.join(process.cwd(), 'public', 'uploads')
-
-    await require('fs').promises.mkdir(uploadDir, { recursive: true })
+    await fs.promises.mkdir(uploadDir, { recursive: true })
 
     const filePath = path.join(uploadDir, 'profile.jpg')
+
+    // Remove existing file if it exists
+    try {
+      await fs.promises.access(filePath)
+      await fs.promises.unlink(filePath)
+    } catch (error) {
+      // File doesn't exist, which is fine
+    }
+
+    // Write the new file
     await writeFile(filePath, buffer)
 
     return NextResponse.json(
@@ -55,5 +70,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
-// No need for export const config anymore.

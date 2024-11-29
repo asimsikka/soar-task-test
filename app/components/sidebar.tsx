@@ -60,7 +60,7 @@ export function Sidebar() {
     <>
       <Sheet>
         <SheetTrigger asChild className="fixed left-4 top-4 z-50 lg:hidden">
-          <Button variant="ghost" size="icon">
+          <Button variant="default" className='bg-white' size="icon">
             <Image
               src="/svgs/menu.svg"
               alt="Menu Icon"

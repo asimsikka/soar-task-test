@@ -89,6 +89,7 @@ export function ImageUploadModal({
           <div className="flex items-center justify-center">
             {previewUrl ? (
               <Image
+                key={previewUrl}
                 src={previewUrl}
                 alt="Preview"
                 width={200}

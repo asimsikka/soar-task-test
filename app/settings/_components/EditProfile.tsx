@@ -73,7 +73,8 @@ export function EditProfile() {
   const [profileImage, setProfileImage] = useState('/images/1.jpg')
 
   const handleUpload = (imageUrl: string) => {
-    setProfileImage(imageUrl)
+    const timestamp = new Date().getTime()
+    setProfileImage(`${imageUrl}?t=${timestamp}`)
   }
 
   useEffect(() => {
@@ -86,9 +87,10 @@ export function EditProfile() {
   useEffect(() => {
     const checkProfileImage = async () => {
       try {
-        const response = await fetch('/uploads/profile.jpg')
+        const timestamp = new Date().getTime()
+        const response = await fetch(`/uploads/profile.jpg?t=${timestamp}`)
         if (response.ok) {
-          setProfileImage('/uploads/profile.jpg')
+          setProfileImage(`/uploads/profile.jpg?t=${timestamp}`)
         } else {
           setProfileImage('/images/1.jpg')
         }
@@ -179,6 +181,7 @@ export function EditProfile() {
         <div className="mb-8 flex w-full flex-col items-center md:mb-12 lg:w-[21%]">
           <div className="relative">
             <Image
+              key={profileImage}
               src={profileImage}
               alt="Profile"
               width={100}

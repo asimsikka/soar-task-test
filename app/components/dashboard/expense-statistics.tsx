@@ -91,35 +91,33 @@ export function ExpenseStatistics() {
       <h2 className="mb-6 text-xl font-semibold text-[#1A1D1F]">
         Expense Statistics
       </h2>
-      <div className="h-full rounded-[20px] bg-white">
-        <div className="h-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={0}
-                outerRadius={150}
-                paddingAngle={3}
-                dataKey="value"
-                labelLine={false}
-                label={renderCustomizedLabel}
-                startAngle={90}
-                endAngle={-270}
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.color}
-                    strokeWidth={2}
-                    stroke="#fff"
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+      <div className="h-full min-h-[340px] overflow-hidden rounded-[20px] bg-white flex items-center justify-center">
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={0}
+              outerRadius={150}
+              paddingAngle={3}
+              dataKey="value"
+              labelLine={false}
+              label={renderCustomizedLabel}
+              startAngle={90}
+              endAngle={-270}
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.color}
+                  strokeWidth={2}
+                  stroke="#fff"
+                />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
       </div>
     </div>
   )
