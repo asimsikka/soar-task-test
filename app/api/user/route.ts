@@ -1,12 +1,9 @@
 import fs from 'fs'
 import { writeFile } from 'fs/promises'
-import { NextConfig } from 'next'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
-export const config: NextConfig = {
-  api: { bodyParser: false },
-}
+// Remove the deprecated `config` and move body parser handling logic into the POST method
 
 export async function GET() {
   const userData = {
@@ -23,10 +20,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    if (request.method !== 'POST') {
-      return NextResponse.json({ error: 'Method Not Allowed' }, { status: 405 })
-    }
-
+    // Parse formData from the request
     const formData = await request.formData()
     const file = formData.get('file') as File | null
 
@@ -43,6 +37,8 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes)
 
     const uploadDir = path.join(process.cwd(), 'public', 'uploads')
+
+    // Ensure the upload directory exists
     await fs.promises.mkdir(uploadDir, { recursive: true })
 
     const filePath = path.join(uploadDir, 'profile.jpg')
@@ -51,8 +47,8 @@ export async function POST(request: NextRequest) {
     try {
       await fs.promises.access(filePath)
       await fs.promises.unlink(filePath)
-    } catch (error) {
-      // File doesn't exist, which is fine
+    } catch {
+      // If file does not exist, ignore error
     }
 
     // Write the new file
